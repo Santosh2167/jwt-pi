@@ -39,6 +39,7 @@ function logout(req, res) {
   // })
 
   req.logout();
+  req.cookie("jwt", null, { maxAge: -1 });
   res.redirect("/");
 
 }
@@ -58,7 +59,8 @@ async function create(req, res, next) {
 
 function generateJWT(req, res) {
   const token = jwt.sign({ sub: req.user._id }, process.env.JWT_SECRET);
-  res.json(token);
+  res.cookie("jwt", token);
+  res.redirect("/dashboard");
 }
 
 module.exports = {

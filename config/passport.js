@@ -38,7 +38,12 @@ passport.use(new LocalStrategy(
 ));
 
 passport.use(new JwtStrategy({
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: (req) => {
+    if (req && req.cookies) {
+      return req.cookies["jwt"];
+    }
+    return null;
+  },
   secretOrKey: process.env.JWT_SECRET
 
 },
