@@ -8,7 +8,7 @@ const passport = require("passport");
 
 router.get("/", PageController.index);
 
-router.get("/login", check_user, AuthenticationController.loginForm);
+router.get("/login", AuthenticationController.loginForm);
 
 router.post("/login", celebrate({
   body: {
@@ -16,11 +16,13 @@ router.post("/login", celebrate({
     password: Joi.string().required()
   }
 }), passport.authenticate("local", {
-  successRedirect: "/dashboard",
+  //successRedirect: "/dashboard",
+  session: false,
   failureRedirect: "/login"
-}));
 
-router.get("/register", check_user, AuthenticationController.make);
+}), AuthenticationController.generateJWT);
+
+router.get("/register", AuthenticationController.make);
 
 router.post("/register", celebrate({
   body: {

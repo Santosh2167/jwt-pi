@@ -1,4 +1,5 @@
 const UserModel = require("./../database/models/user_ model");
+const jwt = require("jsonwebtoken");
 
 function loginForm(req, res) {
   res.render("auth/login");
@@ -55,12 +56,17 @@ async function create(req, res, next) {
 
 }
 
+function generateJWT(req, res) {
+  const token = jwt.sign({ sub: req.user._id }, process.env.JWT_SECRET);
+  res.json(token);
+}
 
 module.exports = {
   loginForm,
   loginVerify,
   make,
   create,
-  logout
+  logout,
+  generateJWT
 
 }
